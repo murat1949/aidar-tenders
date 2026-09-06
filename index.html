@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>ProcureVision KZ — LIVE</title>
+<title>Aidar Tenders</title>
 <style>
 :root{
  --bg:#f4f7fb;--card:#fff;--ink:#172033;--muted:#6b7280;--line:#e2e8f0;
@@ -46,6 +46,7 @@ td:first-child{border-left:1px solid #edf0f5;border-radius:11px 0 0 11px}td:last
 .side-card{margin-bottom:12px}.side-card h4{margin:0 0 10px;font-size:15px}.side-card p{font-size:12px;color:#475569;line-height:1.45}
 .rowline{padding:9px 0;border-bottom:1px solid #edf0f5;font-size:12px}.rowline:last-child{border-bottom:0}
 .notice{display:none;background:#fff7df;border:1px solid #fde7a5;border-radius:14px;padding:12px;margin-bottom:14px;font-size:12px;color:#7c5b00}
+.samruk-result{display:none;border-radius:14px;padding:12px 14px;margin-bottom:14px;font-size:13px;font-weight:700;line-height:1.45}.samruk-result.info{display:block;background:#eef5ff;border:1px solid #cfe0ff;color:#1d4ed8}.samruk-result.ok{display:block;background:#ecfdf3;border:1px solid #bbf7d0;color:#166534}.samruk-result.bad{display:block;background:#fff0ed;border:1px solid #fecaca;color:#b42318}
 .modal{display:none;position:fixed;inset:0;background:rgba(15,23,42,.48);z-index:30;align-items:center;justify-content:center;padding:20px}.modal.open{display:flex}
 .modal-card{max-width:720px;width:100%;background:#fff;border-radius:20px;padding:21px;box-shadow:0 30px 80px rgba(0,0,0,.22)}
 .modal-top{display:flex;justify-content:space-between;gap:12px}.close{border:0;background:#f1f5f9;border-radius:10px;padding:8px 10px;cursor:pointer}
@@ -54,22 +55,34 @@ td:first-child{border-left:1px solid #edf0f5;border-radius:11px 0 0 11px}td:last
 .pager{display:flex;gap:8px;align-items:center;justify-content:center;margin-top:10px}.pager button{border:1px solid var(--line);background:#fff;border-radius:9px;padding:7px 10px;cursor:pointer}.pager button:disabled{opacity:.4}
 @media(max-width:1100px){.kpis{grid-template-columns:repeat(3,1fr)}.grid{grid-template-columns:1fr}.hero{grid-template-columns:1fr}}
 @media(max-width:760px){.kpis{grid-template-columns:1fr 1fr}.filters{grid-template-columns:1fr}.header{align-items:flex-start}.detail-grid{grid-template-columns:1fr}}
+
+.techspec{margin-top:14px;padding:14px;border:1px solid #cfe0ff;border-radius:14px;background:#f6f9ff;display:none}
+.techspec h4{margin:0 0 10px;font-size:16px}
+.techspec-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.techspec-item{background:#fff;border:1px solid #e4ebf7;border-radius:10px;padding:9px 10px}
+.techspec-item b{display:block;font-size:11px;color:#667085;margin-bottom:4px}
+.techspec-note{margin-top:10px;font-size:12px;line-height:1.45;color:#344054}
+@media(max-width:700px){.techspec-grid{grid-template-columns:1fr}}
+
 </style>
+<!-- TEST10N: user-friendly Samruk error messages -->
+<!-- Aidar Tenders production -->
 </head>
 <body>
 <div class="app">
 <header class="header">
- <div class="brand"><div class="logo">P</div><div><h1>ProcureVision KZ</h1><p>Живая лента закупок из Supabase</p></div></div>
+ <div class="brand"><div class="logo">A</div><div><h1>Aidar Tenders</h1><p>Система мониторинга закупок</p></div></div>
  <div class="actions">
-   <span id="connBadge" class="badge warn">База не подключена</span>
-   <button class="btn soft" onclick="openSetup()">Настройка базы</button>
+   <span id="connBadge" class="badge warn">Подключение...</span>
+   <button id="samrukBtn" class="btn soft" onclick="updateSamruk()">Обновить Samruk</button>
+   <button class="btn soft" onclick="openSetup()">Настройка доступа</button>
    <button class="btn primary" onclick="loadAll()">Обновить</button>
  </div>
 </header>
 
 <section class="hero">
- <div><h2>Реальные закупки — в одном окне</h2><p>Эта версия читает таблицу <b>tenders</b> из существующего Supabase. Никаких тестовых строк внутри HTML: лента и показатели строятся из базы.</p></div>
- <div class="hero-box"><b>5 источников в архитектуре</b><br><span style="font-size:12px;opacity:.9">Goszakup, MITWORK, Tizilim, Air Astana — данные уже есть. Samruk остаётся в статусе авторизации.</span></div>
+ <div><h2>Закупки — в одном рабочем окне</h2><p>Актуальная лента закупок, поиск, сроки, бюджеты и технические спецификации — в единой системе.</p></div>
+ <div class="hero-box"><b>5 источников в системе</b><br><span style="font-size:12px;opacity:.9">Goszakup, MITWORK, Tizilim, Air Astana и Samruk.</span></div>
 </section>
 
 <div class="source-strip">
@@ -77,17 +90,18 @@ td:first-child{border-left:1px solid #edf0f5;border-radius:11px 0 0 11px}td:last
  <span class="source-chip"><span class="dot"></span>MITWORK</span>
  <span class="source-chip"><span class="dot"></span>Tizilim</span>
  <span class="source-chip"><span class="dot"></span>Air Astana</span>
- <span class="source-chip"><span class="dot wait"></span>Samruk — авторизация</span>
+ <span class="source-chip"><span class="dot"></span>Samruk</span>
 </div>
 
+<div id="samrukResult" class="samruk-result"></div>
 <div id="notice" class="notice"></div>
 
 <section class="kpis">
  <div class="kpi"><div class="lab">Записей в базе</div><div id="kTotal" class="num">—</div><div class="hint">в загруженной выборке</div></div>
- <div class="kpi"><div class="lab">Активные</div><div id="kActive" class="num">—</div><div class="hint">по флагу is_active</div></div>
+ <div class="kpi"><div class="lab">Активные</div><div id="kActive" class="num">—</div><div class="hint">открытые на текущий момент</div></div>
  <div class="kpi"><div class="lab">Горящие ≤48 ч</div><div id="kUrgent" class="num">—</div><div class="hint">по сроку окончания</div></div>
  <div class="kpi"><div class="lab">Источников с данными</div><div id="kSources" class="num">—</div><div class="hint">в текущей базе</div></div>
- <div class="kpi"><div class="lab">Сумма известных бюджетов</div><div id="kAmount" class="num">—</div><div class="hint">по заполненным amount</div></div>
+ <div class="kpi"><div class="lab">Сумма известных бюджетов</div><div id="kAmount" class="num">—</div><div class="hint">по закупкам с указанным бюджетом</div></div>
 </section>
 
 <div class="filters">
@@ -115,7 +129,7 @@ td:first-child{border-left:1px solid #edf0f5;border-radius:11px 0 0 11px}td:last
  </section>
 
  <aside>
-  <div class="card side-card"><h4>Статус</h4><p id="statusText">Ожидаю подключение к Supabase.</p></div>
+  <div class="card side-card"><h4>Статус</h4><p id="statusText">Подключение к данным...</p></div>
   <div class="card side-card"><h4>По источникам</h4><div id="sourceStats"></div></div>
   <div class="card side-card"><h4>Что уже работает</h4><p>Поиск, фильтры, приоритет по сроку, карточка закупки и переход на исходную площадку.</p></div>
  </aside>
@@ -134,24 +148,29 @@ td:first-child{border-left:1px solid #edf0f5;border-radius:11px 0 0 11px}td:last
    <div class="detail"><b>Окончание</b><span id="mDeadline"></span></div>
    <div class="detail full"><b>Описание</b><span id="mDesc"></span></div>
   </div>
+  <div id="mTechSpec" class="techspec">
+   <h4>Техническая спецификация</h4>
+   <div id="mTechSpecGrid" class="techspec-grid"></div>
+   <div id="mTechSpecNote" class="techspec-note"></div>
+  </div>
   <div style="margin-top:13px"><a id="mLink" class="btn primary" style="display:inline-block;text-decoration:none" target="_blank">Открыть на площадке</a></div>
  </div>
 </div>
 
 <div id="setupModal" class="modal open">
  <div class="modal-card setup">
-  <div class="modal-top"><div><h3>Подключение к Supabase</h3><p>Нужен только <b>Publishable / anon key</b> вашего существующего проекта. Секретный service-role ключ сюда вставлять нельзя.</p></div><button class="close" onclick="closeSetup()">✕</button></div>
-  <input id="publicKey" type="password" placeholder="Вставьте Publishable / anon key">
-  <div class="small">Адрес проекта уже указан: https://swpnpxhoaxcnllieejsn.supabase.co<br>Ключ сохраняется только в LocalStorage этого браузера.</div>
+  <div class="modal-top"><div><h3>Настройка доступа</h3><p>Введите код доступа, выданный администратором системы.</p></div><button class="close" onclick="closeSetup()">✕</button></div>
+  <input id="publicKey" type="password" placeholder="Код доступа">
+  <div class="small">Код сохраняется только в этом браузере.</div>
   <div style="margin-top:13px;display:flex;gap:8px">
    <button class="btn primary" onclick="saveKeyAndConnect()">Подключить</button>
-   <button class="btn soft" onclick="clearKey()">Удалить ключ</button>
+   <button class="btn soft" onclick="clearKey()">Сбросить доступ</button>
   </div>
  </div>
 </div>
 
 <script>
-const SUPABASE_URL="https://swpnpxhoaxcnllieejsn.supabase.co";
+const DATA_GATEWAY=atob("aHR0cHM6Ly9zd3BucHhob2F4Y25sbGllZWpzbi5zdXBhYmFzZS5jbw==");
 let allRows=[], filteredRows=[], page=1;
 const PAGE_SIZE=50;
 
@@ -179,34 +198,44 @@ function priority(t){
  return "mid";
 }
 function pLabel(p){return p==="high"?"🔥 Срочно":p==="mid"?"🟡 Смотреть":"⚪ В базе"}
-function getKey(){return localStorage.getItem("procurevision_supabase_public_key")||""}
+function getKey(){return localStorage.getItem("aidar_access_key")||""}
 function openSetup(){document.getElementById("publicKey").value=getKey();document.getElementById("setupModal").classList.add("open")}
 function closeSetup(){document.getElementById("setupModal").classList.remove("open")}
-function clearKey(){localStorage.removeItem("procurevision_supabase_public_key");document.getElementById("publicKey").value="";setConn("База не подключена","warn")}
+function clearKey(){localStorage.removeItem("aidar_access_key");document.getElementById("publicKey").value="";setConn("Доступ не настроен","warn")}
 async function saveKeyAndConnect(){
  const k=document.getElementById("publicKey").value.trim();
- if(!k){alert("Вставьте Publishable / anon key.");return}
- localStorage.setItem("procurevision_supabase_public_key",k);
+ if(!k){alert("Введите код доступа.");return}
+ localStorage.setItem("aidar_access_key",k);
  closeSetup(); await loadAll();
 }
 function setConn(text,cls){const b=document.getElementById("connBadge");b.textContent=text;b.className="badge "+cls}
 
 async function loadAll(){
  const key=getKey();
- if(!key){setConn("Нужен public key","warn");openSetup();return}
+ if(!key){setConn("Требуется доступ","warn");openSetup();return}
  setConn("Подключение…","warn");
- document.getElementById("statusText").textContent="Читаю таблицу tenders из Supabase…";
+ document.getElementById("statusText").textContent="Загружаю актуальные данные…";
  try{
    const rows=[];
    let from=0, step=1000;
    while(true){
-     const url=SUPABASE_URL+"/rest/v1/tenders?select=id,source_code,source_tender_id,source_lot_id,public_url,title,description,customer_name,customer_bin,region,status_name,amount,currency,quantity,unit,published_at,started_at,expires_at,is_active&order=id.desc";
-     const r=await fetch(url,{headers:{
-       "apikey":key,"Authorization":"Bearer "+key,"Range":from+"-"+(from+step-1),"Prefer":"count=exact"
-     }});
+     const url=DATA_GATEWAY+"/rest/v1/tenders?select=id,source_code,source_tender_id,source_lot_id,public_url,title,description,customer_name,customer_bin,region,status_name,amount,currency,quantity,unit,published_at,started_at,expires_at,is_active,raw&order=id.desc";
+     const headers={
+       "apikey":key,
+       "Range":from+"-"+(from+step-1),
+       "Prefer":"count=exact"
+     };
+     // Старый формат ключа является JWT и требует Authorization.
+     // Новый публичный код доступа передаётся только через apikey.
+     if(key.split(".").length===3){
+       headers["Authorization"]="Bearer "+key;
+     }
+     const r=await fetch(url,{headers});
      if(!r.ok){
-       const txt=await r.text();
-       throw new Error("HTTP "+r.status+" — "+txt.slice(0,260));
+       if(r.status===401 || r.status===403){
+         throw new Error("Код доступа не принят. Проверьте код доступа и повторите подключение.");
+       }
+       throw new Error("Сервис данных временно недоступен. Повторите попытку позже.");
      }
      const batch=await r.json();
      rows.push(...batch);
@@ -218,16 +247,16 @@ async function loadAll(){
    buildSourceFilter();
    updateKpis();
    applyFilters();
-   setConn("LIVE • Supabase","live");
-   document.getElementById("statusText").textContent="Подключено. Показаны реальные строки из таблицы tenders.";
+   setConn("СИСТЕМА • ПОДКЛЮЧЕНА","live");
+   document.getElementById("statusText").textContent="Подключено. Актуальные данные загружены.";
    document.getElementById("notice").style.display="none";
  }catch(e){
    console.error(e);
    setConn("Ошибка доступа","err");
    const n=document.getElementById("notice");
    n.style.display="block";
-   n.textContent="Не удалось прочитать tenders: "+e.message;
-   document.getElementById("statusText").textContent="Supabase ответил ошибкой. Пришлите скрин этой страницы — исправим доступ без изменения данных.";
+   n.textContent="Не удалось загрузить данные: "+e.message;
+   document.getElementById("statusText").textContent="Сервис данных временно недоступен. Пришлите скрин этой страницы ответственному сотруднику.";
  }
 }
 function buildSourceFilter(){
@@ -304,12 +333,122 @@ function openDetail(i){
  document.getElementById("mAmount").textContent=fmtAmount(t.amount);
  document.getElementById("mDeadline").textContent=fmtDate(t.expires_at);
  document.getElementById("mDesc").textContent=t.description||"—";
+
+ const tech=document.getElementById("mTechSpec");
+ const techGrid=document.getElementById("mTechSpecGrid");
+ const techNote=document.getElementById("mTechSpecNote");
+ const spec=(t.raw && typeof t.raw==="object") ? t.raw.techspec : null;
+
+ if(spec && typeof spec==="object"){
+   const pf=(spec.parsed_fields && typeof spec.parsed_fields==="object") ? spec.parsed_fields : {};
+   const items=[
+     ["Закупка", spec.procurement_no],
+     ["Лот", spec.lot_id],
+     ["Краткое описание", spec.short_description],
+     ["Количество", spec.quantity!=null ? String(spec.quantity)+(spec.unit ? " "+spec.unit : "") : null],
+     ["Место поставки", spec.delivery_place],
+     ["Условия поставки", spec.delivery_terms],
+     ["Срок поставки", spec.delivery_period],
+     ["Оплата", spec.payment_terms],
+     ["Тип / чернила", pf.ink_type],
+     ["Цвет", pf.color],
+     ["Совместимость", pf.compatibility],
+     ["Производительность / объём", pf.yield_or_volume],
+     ["Назначение", pf.purpose]
+   ].filter(x=>x[1]!==null && x[1]!==undefined && String(x[1]).trim()!=="");
+
+   techGrid.innerHTML=items.map(x =>
+     '<div class="techspec-item"><b>'+esc(x[0])+'</b><span>'+esc(String(x[1]))+'</span></div>'
+   ).join("");
+
+   const extras=[];
+   if(spec.additional_description) extras.push("<b>Доп. характеристика:</b> "+esc(spec.additional_description));
+   if(spec.technical_requirements) extras.push("<b>Технические требования:</b> "+esc(spec.technical_requirements));
+   if(spec.source_pdf) extras.push("<b>Источник:</b> "+esc(spec.source_pdf));
+   techNote.innerHTML=extras.join("<br><br>");
+   tech.style.display="block";
+ }else{
+   techGrid.innerHTML="";
+   techNote.innerHTML="";
+   tech.style.display="none";
+ }
+
  const a=document.getElementById("mLink");a.href=t.public_url||"#";a.style.display=t.public_url?"inline-block":"none";
  document.getElementById("detailModal").classList.add("open");
 }
 function closeDetail(){document.getElementById("detailModal").classList.remove("open")}
 
-if(getKey()){closeSetup();loadAll()}else{setConn("Нужен public key","warn")}
+function showSamrukResult(text,kind){
+ const n=document.getElementById("samrukResult");
+ n.className="samruk-result "+(kind||"info");
+ n.textContent=text;
+}
+async function updateSamruk(){
+ const b=document.getElementById("samrukBtn");
+ const oldText=b.textContent;
+ const beforeTotal=Array.isArray(allRows)?allRows.length:0;
+ b.disabled=true;
+ b.textContent="Samruk: обновляю…";
+ showSamrukResult("Samruk: идёт обновление. Оставайтесь на этой странице — техническое окно больше не открывается.","info");
+ try{
+   const r=await fetch("http://127.0.0.1:8765/update-samruk?ts="+Date.now(),{
+     method:"GET",
+     cache:"no-store"
+   });
+   let data=null;
+   try{ data=await r.json(); }catch(_){}
+   if(!r.ok || !data || data.ok!==true){
+     const msg=(data&&data.message)?data.message:("HTTP "+r.status);
+     throw new Error(msg);
+   }
+
+   await loadAll();
+   const afterTotal=Array.isArray(allRows)?allRows.length:beforeTotal;
+   const added=Math.max(0,afterTotal-beforeTotal);
+   const tech=(data.auto_techspec_downloaded||0)+(data.auto_techspec_from_card||0);
+   const errors=(data.pending_errors||0)+(data.auto_techspec_errors||0);
+   showSamrukResult(
+     "Samruk готово. Проверено "+(data.rows||0)+
+     " · Новых "+added+
+     " · Техспек "+tech+
+     " · Ошибок "+errors,
+     errors?"bad":"ok"
+   );
+ }catch(e){
+   console.error(e);
+   const msg=String(e&&e.message?e.message:e);
+
+   if(/Failed to fetch|NetworkError|Load failed/i.test(msg)){
+     showSamrukResult(
+       "Обновление Samruk сейчас не запущено. Откройте ярлык «Aidar Tenders — обновление Samruk» и повторите.",
+       "bad"
+     );
+   }else if(/Открыто несколько вкладок Samruk/i.test(msg)){
+     showSamrukResult(
+       "Открыто несколько вкладок Samruk. Оставьте одну вкладку с нужным поиском и повторите обновление.",
+       "bad"
+     );
+   }else if(
+     /Не найден открытый Samruk в Chrome collector mode/i.test(msg) ||
+     /WinError\s*10061/i.test(msg) ||
+     /urlopen error/i.test(msg) ||
+     /connection refused/i.test(msg) ||
+     /отверг запрос на подключение/i.test(msg)
+   ){
+     showSamrukResult(
+       "Samruk не открыт. Откройте ярлык «Samruk для Aidar Tenders», войдите в систему и повторите обновление.",
+       "bad"
+     );
+   }else{
+     showSamrukResult("Samruk не обновлён: "+msg,"bad");
+   }
+ }finally{
+   b.disabled=false;
+   b.textContent=oldText;
+ }
+}
+
+if(getKey()){closeSetup();loadAll()}else{setConn("Требуется доступ","warn")}
 </script>
 </body>
 </html>
