@@ -98,10 +98,10 @@ td:first-child{border-left:1px solid #edf0f5;border-radius:11px 0 0 11px}td:last
 
 <section class="kpis">
  <div class="kpi"><div class="lab">Записей в базе</div><div id="kTotal" class="num">—</div><div class="hint">в загруженной выборке</div></div>
- <div class="kpi"><div class="lab">Активные</div><div id="kActive" class="num">—</div><div class="hint">по флагу is_active</div></div>
+ <div class="kpi"><div class="lab">Активные</div><div id="kActive" class="num">—</div><div class="hint">открытые на текущий момент</div></div>
  <div class="kpi"><div class="lab">Горящие ≤48 ч</div><div id="kUrgent" class="num">—</div><div class="hint">по сроку окончания</div></div>
  <div class="kpi"><div class="lab">Источников с данными</div><div id="kSources" class="num">—</div><div class="hint">в текущей базе</div></div>
- <div class="kpi"><div class="lab">Сумма известных бюджетов</div><div id="kAmount" class="num">—</div><div class="hint">по заполненным amount</div></div>
+ <div class="kpi"><div class="lab">Сумма известных бюджетов</div><div id="kAmount" class="num">—</div><div class="hint">по закупкам с указанным бюджетом</div></div>
 </section>
 
 <div class="filters">
@@ -198,14 +198,14 @@ function priority(t){
  return "mid";
 }
 function pLabel(p){return p==="high"?"🔥 Срочно":p==="mid"?"🟡 Смотреть":"⚪ В базе"}
-function getKey(){return этот браузер.getItem("aidar_access_key")||""}
+function getKey(){return localStorage.getItem("aidar_access_key")||""}
 function openSetup(){document.getElementById("publicKey").value=getKey();document.getElementById("setupModal").classList.add("open")}
 function closeSetup(){document.getElementById("setupModal").classList.remove("open")}
-function clearKey(){этот браузер.removeItem("aidar_access_key");document.getElementById("publicKey").value="";setConn("Доступ не настроен","warn")}
+function clearKey(){localStorage.removeItem("aidar_access_key");document.getElementById("publicKey").value="";setConn("Доступ не настроен","warn")}
 async function saveKeyAndConnect(){
  const k=document.getElementById("publicKey").value.trim();
  if(!k){alert("Введите код доступа.");return}
- этот браузер.setItem("aidar_access_key",k);
+ localStorage.setItem("aidar_access_key",k);
  closeSetup(); await loadAll();
 }
 function setConn(text,cls){const b=document.getElementById("connBadge");b.textContent=text;b.className="badge "+cls}
@@ -220,12 +220,22 @@ async function loadAll(){
    let from=0, step=1000;
    while(true){
      const url=DATA_GATEWAY+"/rest/v1/tenders?select=id,source_code,source_tender_id,source_lot_id,public_url,title,description,customer_name,customer_bin,region,status_name,amount,currency,quantity,unit,published_at,started_at,expires_at,is_active,raw&order=id.desc";
-     const r=await fetch(url,{headers:{
-       "apikey":key,"Authorization":"Bearer "+key,"Range":from+"-"+(from+step-1),"Prefer":"count=exact"
-     }});
+     const headers={
+       "apikey":key,
+       "Range":from+"-"+(from+step-1),
+       "Prefer":"count=exact"
+     };
+     // Старый формат ключа является JWT и требует Authorization.
+     // Новый публичный код доступа передаётся только через apikey.
+     if(key.split(".").length===3){
+       headers["Authorization"]="Bearer "+key;
+     }
+     const r=await fetch(url,{headers});
      if(!r.ok){
-       const txt=await r.text();
-       throw new Error("HTTP "+r.status+" — "+txt.slice(0,260));
+       if(r.status===401 || r.status===403){
+         throw new Error("Код доступа не принят. Проверьте код доступа и повторите подключение.");
+       }
+       throw new Error("Сервис данных временно недоступен. Повторите попытку позже.");
      }
      const batch=await r.json();
      rows.push(...batch);
