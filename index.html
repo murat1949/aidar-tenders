@@ -164,7 +164,7 @@ td:first-child{border-left:1px solid #edf0f5;border-radius:11px 0 0 11px}td:last
   <div class="small">Код сохраняется только в этом браузере.</div>
   <div style="margin-top:13px;display:flex;gap:8px">
    <button class="btn primary" onclick="saveKeyAndConnect()">Подключить</button>
-   <button class="btn soft" onclick="clearKey()">Удалить ключ</button>
+   <button class="btn soft" onclick="clearKey()">Сбросить доступ</button>
   </div>
  </div>
 </div>
@@ -198,21 +198,21 @@ function priority(t){
  return "mid";
 }
 function pLabel(p){return p==="high"?"🔥 Срочно":p==="mid"?"🟡 Смотреть":"⚪ В базе"}
-function getKey(){return localStorage.getItem("aidar_access_key")||""}
+function getKey(){return этот браузер.getItem("aidar_access_key")||""}
 function openSetup(){document.getElementById("publicKey").value=getKey();document.getElementById("setupModal").classList.add("open")}
 function closeSetup(){document.getElementById("setupModal").classList.remove("open")}
-function clearKey(){localStorage.removeItem("aidar_access_key");document.getElementById("publicKey").value="";setConn("Доступ не настроен","warn")}
+function clearKey(){этот браузер.removeItem("aidar_access_key");document.getElementById("publicKey").value="";setConn("Доступ не настроен","warn")}
 async function saveKeyAndConnect(){
  const k=document.getElementById("publicKey").value.trim();
  if(!k){alert("Введите код доступа.");return}
- localStorage.setItem("aidar_access_key",k);
+ этот браузер.setItem("aidar_access_key",k);
  closeSetup(); await loadAll();
 }
 function setConn(text,cls){const b=document.getElementById("connBadge");b.textContent=text;b.className="badge "+cls}
 
 async function loadAll(){
  const key=getKey();
- if(!key){setConn("Нужен public key","warn");openSetup();return}
+ if(!key){setConn("Требуется доступ","warn");openSetup();return}
  setConn("Подключение…","warn");
  document.getElementById("statusText").textContent="Загружаю актуальные данные…";
  try{
@@ -438,7 +438,7 @@ async function updateSamruk(){
  }
 }
 
-if(getKey()){closeSetup();loadAll()}else{setConn("Нужен public key","warn")}
+if(getKey()){closeSetup();loadAll()}else{setConn("Требуется доступ","warn")}
 </script>
 </body>
 </html>
