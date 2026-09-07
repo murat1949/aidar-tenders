@@ -75,7 +75,8 @@ td:first-child{border-left:1px solid #edf0f5;border-radius:11px 0 0 11px}td:last
  <div class="actions">
    <span id="connBadge" class="badge warn">Подключение...</span>
    <button id="samrukBtn" class="btn soft" onclick="updateSamruk()">Обновить Samruk</button>
-   <button class="btn soft" onclick="openSetup()">Настройка доступа</button>
+   <span id="userBadge" class="badge" style="display:none"></span>
+   <button id="logoutBtn" class="btn soft" style="display:none" onclick="logoutUser()">Выйти</button>
    <button class="btn primary" onclick="loadAll()">Обновить</button>
  </div>
 </header>
@@ -157,20 +158,28 @@ td:first-child{border-left:1px solid #edf0f5;border-radius:11px 0 0 11px}td:last
  </div>
 </div>
 
-<div id="setupModal" class="modal open">
+<div id="loginModal" class="modal open">
  <div class="modal-card setup">
-  <div class="modal-top"><div><h3>Настройка доступа</h3><p>Введите код доступа, выданный администратором системы.</p></div><button class="close" onclick="closeSetup()">✕</button></div>
-  <input id="publicKey" type="password" placeholder="Код доступа">
-  <div class="small">Код сохраняется только в этом браузере.</div>
+  <div class="modal-top"><div><h3>Вход в Aidar Tenders</h3><p>Введите персональный 4-значный код доступа.</p></div></div>
+  <input id="teamCode" type="password" inputmode="numeric" maxlength="4" placeholder="Код доступа" autocomplete="off">
+  <div id="loginError" class="small" style="color:#b42318;min-height:16px;margin-top:7px"></div>
   <div style="margin-top:13px;display:flex;gap:8px">
-   <button class="btn primary" onclick="saveKeyAndConnect()">Подключить</button>
-   <button class="btn soft" onclick="clearKey()">Сбросить доступ</button>
+   <button class="btn primary" onclick="loginUser()">Войти</button>
   </div>
  </div>
 </div>
 
 <script>
 const DATA_GATEWAY=atob("aHR0cHM6Ly9zd3BucHhob2F4Y25sbGllZWpzbi5zdXBhYmFzZS5jbw==");
+const DATA_KEY="sb_publishable_IDfG17rqCnpT7CeZairyyg_Sx7agWuu";
+const TEAM_CODES={
+ "1111":{role:"admin",label:"Администратор"},
+ "2222":{role:"staff",label:"Сотрудник 1"},
+ "3333":{role:"staff",label:"Сотрудник 2"},
+ "4444":{role:"staff",label:"Сотрудник 3"},
+ "5555":{role:"staff",label:"Сотрудник 4"}
+};
+let currentUser=null;
 let allRows=[], filteredRows=[], page=1;
 const PAGE_SIZE=50;
 
@@ -198,21 +207,48 @@ function priority(t){
  return "mid";
 }
 function pLabel(p){return p==="high"?"🔥 Срочно":p==="mid"?"🟡 Смотреть":"⚪ В базе"}
-function getKey(){return localStorage.getItem("aidar_access_key")||""}
-function openSetup(){document.getElementById("publicKey").value=getKey();document.getElementById("setupModal").classList.add("open")}
-function closeSetup(){document.getElementById("setupModal").classList.remove("open")}
-function clearKey(){localStorage.removeItem("aidar_access_key");document.getElementById("publicKey").value="";setConn("Доступ не настроен","warn")}
-async function saveKeyAndConnect(){
- const k=document.getElementById("publicKey").value.trim();
- if(!k){alert("Введите код доступа.");return}
- localStorage.setItem("aidar_access_key",k);
- closeSetup(); await loadAll();
+function restoreUser(){
+ const raw=sessionStorage.getItem("aidar_team_user");
+ if(!raw) return false;
+ try{currentUser=JSON.parse(raw);return !!currentUser}catch(_){return false}
+}
+function applyUserUI(){
+ const ub=document.getElementById("userBadge");
+ const lb=document.getElementById("logoutBtn");
+ const sb=document.getElementById("samrukBtn");
+ if(!currentUser){ub.style.display="none";lb.style.display="none";return}
+ ub.textContent=currentUser.label;
+ ub.style.display="inline-block";
+ lb.style.display="inline-block";
+ // На этапе командного теста обновление Samruk доступно администратору.
+ if(sb) sb.style.display=currentUser.role==="admin"?"inline-block":"none";
+}
+async function loginUser(){
+ const input=document.getElementById("teamCode");
+ const code=(input.value||"").trim();
+ const u=TEAM_CODES[code];
+ if(!u){document.getElementById("loginError").textContent="Неверный код доступа.";input.select();return}
+ currentUser={role:u.role,label:u.label};
+ sessionStorage.setItem("aidar_team_user",JSON.stringify(currentUser));
+ document.getElementById("loginError").textContent="";
+ document.getElementById("loginModal").classList.remove("open");
+ applyUserUI();
+ await loadAll();
+}
+function logoutUser(){
+ sessionStorage.removeItem("aidar_team_user");
+ currentUser=null;
+ allRows=[];filteredRows=[];
+ document.getElementById("teamCode").value="";
+ document.getElementById("loginModal").classList.add("open");
+ applyUserUI();
+ setConn("Ожидание входа","warn");
 }
 function setConn(text,cls){const b=document.getElementById("connBadge");b.textContent=text;b.className="badge "+cls}
 
 async function loadAll(){
- const key=getKey();
- if(!key){setConn("Требуется доступ","warn");openSetup();return}
+ const key=DATA_KEY;
+ if(!currentUser){setConn("Ожидание входа","warn");return}
  setConn("Подключение…","warn");
  document.getElementById("statusText").textContent="Загружаю актуальные данные…";
  try{
@@ -225,15 +261,13 @@ async function loadAll(){
        "Range":from+"-"+(from+step-1),
        "Prefer":"count=exact"
      };
-     // Старый формат ключа является JWT и требует Authorization.
-     // Новый публичный код доступа передаётся только через apikey.
      if(key.split(".").length===3){
        headers["Authorization"]="Bearer "+key;
      }
      const r=await fetch(url,{headers});
      if(!r.ok){
        if(r.status===401 || r.status===403){
-         throw new Error("Код доступа не принят. Проверьте код доступа и повторите подключение.");
+         throw new Error("Система не смогла подключиться к данным. Обратитесь к администратору.");
        }
        throw new Error("Сервис данных временно недоступен. Повторите попытку позже.");
      }
@@ -448,7 +482,16 @@ async function updateSamruk(){
  }
 }
 
-if(getKey()){closeSetup();loadAll()}else{setConn("Требуется доступ","warn")}
+document.getElementById("teamCode").addEventListener("keydown",e=>{if(e.key==="Enter")loginUser()});
+if(restoreUser()){
+ document.getElementById("loginModal").classList.remove("open");
+ applyUserUI();
+ loadAll();
+}else{
+ applyUserUI();
+ setConn("Ожидание входа","warn");
+ setTimeout(()=>document.getElementById("teamCode").focus(),50);
+}
 </script>
 </body>
 </html>
