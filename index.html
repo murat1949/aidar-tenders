@@ -3,495 +3,59 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Aidar Tenders</title>
+<title>Tender Radar KZ — профиль компании Айдара</title>
 <style>
-:root{
- --bg:#f4f7fb;--card:#fff;--ink:#172033;--muted:#6b7280;--line:#e2e8f0;
- --blue:#2563eb;--green:#16a34a;--orange:#d97706;--red:#dc2626;--purple:#7c3aed;
- --shadow:0 12px 30px rgba(23,32,51,.08);--r:18px
-}
-*{box-sizing:border-box}
-body{margin:0;background:linear-gradient(180deg,#eaf2ff 0,#f6f8fb 260px,#f4f7fb 100%);font-family:Arial,Helvetica,sans-serif;color:var(--ink)}
-.app{max-width:1480px;margin:0 auto;padding:18px}
-.header{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:16px}
-.brand{display:flex;gap:12px;align-items:center}
-.logo{width:48px;height:48px;border-radius:15px;background:linear-gradient(135deg,var(--blue),var(--purple));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:22px;box-shadow:var(--shadow)}
-.brand h1{margin:0;font-size:24px}.brand p{margin:3px 0 0;color:var(--muted);font-size:13px}
-.actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.badge{padding:8px 11px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:12px;font-weight:800}
-.live{background:#eaf8ef;color:#18723b}.warn{background:#fff7df;color:#9a6700}.err{background:#fff0ed;color:#b42318}
-.btn{border:0;border-radius:12px;padding:11px 14px;font-weight:800;cursor:pointer;font-size:13px}
-.btn.primary{background:var(--blue);color:#fff}.btn.soft{background:#fff;border:1px solid var(--line);color:var(--ink)}
-.hero{background:linear-gradient(135deg,#1d4ed8,#2563eb 55%,#7c3aed);color:#fff;border-radius:24px;padding:22px 25px;box-shadow:var(--shadow);margin-bottom:16px;display:grid;grid-template-columns:1.15fr .85fr;gap:16px}
-.hero h2{font-size:31px;margin:0 0 8px}.hero p{margin:0;color:rgba(255,255,255,.88);line-height:1.5;font-size:14px}
-.hero-box{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:16px;padding:14px}
-.source-strip{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px}
-.source-chip{background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 11px;font-size:12px;font-weight:800;box-shadow:0 5px 15px rgba(23,32,51,.04)}
-.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;background:var(--green)}.dot.wait{background:var(--orange)}
-.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:11px;margin-bottom:14px}
-.kpi{background:#fff;border:1px solid var(--line);border-radius:16px;padding:15px;box-shadow:var(--shadow)}
-.kpi .lab{font-size:12px;color:var(--muted);font-weight:700;margin-bottom:7px}.kpi .num{font-size:26px;font-weight:900}.kpi .hint{font-size:11px;margin-top:6px;color:var(--muted)}
-.filters{display:grid;grid-template-columns:2fr 1fr 1fr 1fr auto;gap:9px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px;box-shadow:var(--shadow);margin-bottom:14px}
-.input,.select{width:100%;border:1px solid var(--line);border-radius:11px;padding:11px 12px;background:#fff;font-size:13px}
-.grid{display:grid;grid-template-columns:1fr 330px;gap:14px}
-.card{background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:14px}
-.table-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}.table-head h3{margin:0;font-size:17px}.table-head span{color:var(--muted);font-size:12px}
-table{width:100%;border-collapse:separate;border-spacing:0 7px}
-th{font-size:10px;text-transform:uppercase;color:var(--muted);text-align:left;padding:0 8px 4px}
-td{background:#fafbfd;border-top:1px solid #edf0f5;border-bottom:1px solid #edf0f5;padding:10px 8px;font-size:12px;vertical-align:top}
-td:first-child{border-left:1px solid #edf0f5;border-radius:11px 0 0 11px}td:last-child{border-right:1px solid #edf0f5;border-radius:0 11px 11px 0}
-.title{font-weight:800;font-size:13px;margin-bottom:4px;max-width:520px}.sub{font-size:11px;color:var(--muted);line-height:1.35}
-.prio{display:inline-block;padding:5px 7px;border-radius:999px;font-size:10px;font-weight:900;white-space:nowrap}.high{background:#fff0ed;color:#c2410c}.mid{background:#fff7df;color:#a16207}.low{background:#eef2f7;color:#475569}
-.link{color:var(--blue);font-weight:800;text-decoration:none;cursor:pointer}
-.side-card{margin-bottom:12px}.side-card h4{margin:0 0 10px;font-size:15px}.side-card p{font-size:12px;color:#475569;line-height:1.45}
-.rowline{padding:9px 0;border-bottom:1px solid #edf0f5;font-size:12px}.rowline:last-child{border-bottom:0}
-.notice{display:none;background:#fff7df;border:1px solid #fde7a5;border-radius:14px;padding:12px;margin-bottom:14px;font-size:12px;color:#7c5b00}
-.samruk-result{display:none;border-radius:14px;padding:12px 14px;margin-bottom:14px;font-size:13px;font-weight:700;line-height:1.45}.samruk-result.info{display:block;background:#eef5ff;border:1px solid #cfe0ff;color:#1d4ed8}.samruk-result.ok{display:block;background:#ecfdf3;border:1px solid #bbf7d0;color:#166534}.samruk-result.bad{display:block;background:#fff0ed;border:1px solid #fecaca;color:#b42318}
-.modal{display:none;position:fixed;inset:0;background:rgba(15,23,42,.48);z-index:30;align-items:center;justify-content:center;padding:20px}.modal.open{display:flex}
-.modal-card{max-width:720px;width:100%;background:#fff;border-radius:20px;padding:21px;box-shadow:0 30px 80px rgba(0,0,0,.22)}
-.modal-top{display:flex;justify-content:space-between;gap:12px}.close{border:0;background:#f1f5f9;border-radius:10px;padding:8px 10px;cursor:pointer}
-.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}.detail{padding:11px;border:1px solid var(--line);border-radius:12px;background:#fafbfd}.detail b{display:block;color:var(--muted);font-size:10px;margin-bottom:4px}.detail span{font-size:12px;font-weight:700}.full{grid-column:1/-1}
-.setup{max-width:650px}.setup h3{margin:0 0 8px}.setup p{font-size:13px;color:#475569;line-height:1.5}.setup input{width:100%;padding:12px;border:1px solid var(--line);border-radius:11px;font-family:monospace}.setup .small{font-size:11px;color:var(--muted);margin-top:8px}
-.pager{display:flex;gap:8px;align-items:center;justify-content:center;margin-top:10px}.pager button{border:1px solid var(--line);background:#fff;border-radius:9px;padding:7px 10px;cursor:pointer}.pager button:disabled{opacity:.4}
-@media(max-width:1100px){.kpis{grid-template-columns:repeat(3,1fr)}.grid{grid-template-columns:1fr}.hero{grid-template-columns:1fr}}
-@media(max-width:760px){.kpis{grid-template-columns:1fr 1fr}.filters{grid-template-columns:1fr}.header{align-items:flex-start}.detail-grid{grid-template-columns:1fr}}
-
-.techspec{margin-top:14px;padding:14px;border:1px solid #cfe0ff;border-radius:14px;background:#f6f9ff;display:none}
-.techspec h4{margin:0 0 10px;font-size:16px}
-.techspec-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-.techspec-item{background:#fff;border:1px solid #e4ebf7;border-radius:10px;padding:9px 10px}
-.techspec-item b{display:block;font-size:11px;color:#667085;margin-bottom:4px}
-.techspec-note{margin-top:10px;font-size:12px;line-height:1.45;color:#344054}
-@media(max-width:700px){.techspec-grid{grid-template-columns:1fr}}
-
+:root{--bg:#f4f7fb;--card:#fff;--ink:#172033;--muted:#6b7280;--line:#e2e8f0;--blue:#2563eb;--green:#16a34a;--orange:#d97706;--red:#dc2626;--purple:#7c3aed;--shadow:0 12px 30px rgba(23,32,51,.08);--r:18px}
+*{box-sizing:border-box} body{margin:0;background:linear-gradient(180deg,#eaf2ff 0,#f6f8fb 260px,#f4f7fb 100%);font-family:Arial,Helvetica,sans-serif;color:var(--ink)}
+.app{max-width:1480px;margin:0 auto;padding:18px}.header{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:16px}.brand{display:flex;gap:12px;align-items:center}.logo{width:48px;height:48px;border-radius:15px;background:linear-gradient(135deg,var(--blue),var(--purple));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:18px;box-shadow:var(--shadow)}.brand h1{margin:0;font-size:24px}.brand p{margin:3px 0 0;color:var(--muted);font-size:13px}.actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.badge{padding:8px 11px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:12px;font-weight:800}.live{background:#eaf8ef;color:#18723b}.warn{background:#fff7df;color:#9a6700}.err{background:#fff0ed;color:#b42318}.btn{border:0;border-radius:12px;padding:11px 14px;font-weight:800;cursor:pointer;font-size:13px}.btn.primary{background:var(--blue);color:#fff}.btn.soft{background:#fff;border:1px solid var(--line);color:var(--ink)}
+.hero{background:linear-gradient(135deg,#12285f,#1d4ed8 55%,#7c3aed);color:#fff;border-radius:24px;padding:22px 25px;box-shadow:var(--shadow);margin-bottom:14px;display:grid;grid-template-columns:1.15fr .85fr;gap:16px}.hero h2{font-size:31px;margin:0 0 8px}.hero p{margin:0;color:rgba(255,255,255,.9);line-height:1.5;font-size:14px}.hero-box{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:16px;padding:14px;line-height:1.5}
+.profile{display:grid;grid-template-columns:1.2fr .8fr;gap:12px;margin-bottom:14px}.profile-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:var(--shadow)}.profile-card h3{margin:0 0 8px;font-size:16px}.chips{display:flex;gap:7px;flex-wrap:wrap}.chip{padding:7px 10px;border-radius:999px;background:#eef5ff;border:1px solid #d8e7ff;font-size:12px;font-weight:800}.chip.good{background:#eaf8ef;border-color:#cdebd7;color:#18723b}.chip.off{background:#f6f7f9;color:#64748b}
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:11px;margin-bottom:14px}.kpi{background:#fff;border:1px solid var(--line);border-radius:16px;padding:15px;box-shadow:var(--shadow)}.kpi .lab{font-size:12px;color:var(--muted);font-weight:700;margin-bottom:7px}.kpi .num{font-size:26px;font-weight:900}.kpi .hint{font-size:11px;margin-top:6px;color:var(--muted)}
+.filters{display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:9px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px;box-shadow:var(--shadow);margin-bottom:14px}.input,.select{width:100%;border:1px solid var(--line);border-radius:11px;padding:11px 12px;background:#fff;font-size:13px}.grid{display:grid;grid-template-columns:1fr 330px;gap:14px}.card{background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:14px}.table-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}.table-head h3{margin:0;font-size:17px}.table-head span{color:var(--muted);font-size:12px}table{width:100%;border-collapse:separate;border-spacing:0 7px}th{font-size:10px;text-transform:uppercase;color:var(--muted);text-align:left;padding:0 8px 4px}td{background:#fafbfd;border-top:1px solid #edf0f5;border-bottom:1px solid #edf0f5;padding:10px 8px;font-size:12px;vertical-align:top}td:first-child{border-left:1px solid #edf0f5;border-radius:11px 0 0 11px}td:last-child{border-right:1px solid #edf0f5;border-radius:0 11px 11px 0}.title{font-weight:800;font-size:13px;margin-bottom:4px;max-width:520px}.sub{font-size:11px;color:var(--muted);line-height:1.35}.prio{display:inline-block;padding:5px 7px;border-radius:999px;font-size:10px;font-weight:900;white-space:nowrap}.high{background:#fff0ed;color:#c2410c}.mid{background:#fff7df;color:#a16207}.low{background:#eef2f7;color:#475569}.link{color:var(--blue);font-weight:800;text-decoration:none;cursor:pointer}.side-card{margin-bottom:12px}.side-card h4{margin:0 0 10px;font-size:15px}.side-card p{font-size:12px;color:#475569;line-height:1.45}.rowline{padding:9px 0;border-bottom:1px solid #edf0f5;font-size:12px}.rowline:last-child{border-bottom:0}.notice{display:none;background:#fff7df;border:1px solid #fde7a5;border-radius:14px;padding:12px;margin-bottom:14px;font-size:12px;color:#7c5b00}.pager{display:flex;gap:8px;align-items:center;justify-content:center;margin-top:10px}.pager button{border:1px solid var(--line);background:#fff;border-radius:9px;padding:7px 10px;cursor:pointer}.pager button:disabled{opacity:.4}
+.modal{display:none;position:fixed;inset:0;background:rgba(15,23,42,.48);z-index:30;align-items:center;justify-content:center;padding:20px}.modal.open{display:flex}.modal-card{max-width:760px;width:100%;max-height:88vh;overflow:auto;background:#fff;border-radius:20px;padding:21px;box-shadow:0 30px 80px rgba(0,0,0,.22)}.modal-top{display:flex;justify-content:space-between;gap:12px}.close{border:0;background:#f1f5f9;border-radius:10px;padding:8px 10px;cursor:pointer}.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}.detail{padding:11px;border:1px solid var(--line);border-radius:12px;background:#fafbfd}.detail b{display:block;color:var(--muted);font-size:10px;margin-bottom:4px}.detail span{font-size:12px;font-weight:700}.full{grid-column:1/-1}.setup{max-width:650px}.setup h3{margin:0 0 8px}.setup p{font-size:13px;color:#475569;line-height:1.5}.setup input{width:100%;padding:12px;border:1px solid var(--line);border-radius:11px;font-family:monospace}.setup .small{font-size:11px;color:var(--muted);margin-top:8px}.techspec{margin-top:14px;padding:14px;border:1px solid #cfe0ff;border-radius:14px;background:#f6f9ff;display:none}.techspec h4{margin:0 0 10px;font-size:16px}.techspec-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.techspec-item{background:#fff;border:1px solid #e4ebf7;border-radius:10px;padding:9px 10px}.techspec-item b{display:block;font-size:11px;color:#667085;margin-bottom:4px}.techspec-note{margin-top:10px;font-size:12px;line-height:1.45;color:#344054}
+@media(max-width:1100px){.kpis{grid-template-columns:repeat(3,1fr)}.grid{grid-template-columns:1fr}.hero,.profile{grid-template-columns:1fr}}@media(max-width:760px){.kpis{grid-template-columns:1fr 1fr}.filters{grid-template-columns:1fr}.header{align-items:flex-start}.detail-grid{grid-template-columns:1fr}.techspec-grid{grid-template-columns:1fr}}
 </style>
-<!-- TEST10N: user-friendly Samruk error messages -->
-<!-- Aidar Tenders production -->
 </head>
 <body>
 <div class="app">
-<header class="header">
- <div class="brand"><div class="logo">A</div><div><h1>Aidar Tenders</h1><p>Система мониторинга закупок</p></div></div>
- <div class="actions">
-   <span id="connBadge" class="badge warn">Подключение...</span>
-   <button id="samrukBtn" class="btn soft" onclick="updateSamruk()">Обновить Samruk</button>
-   <span id="userBadge" class="badge" style="display:none"></span>
-   <button id="logoutBtn" class="btn soft" style="display:none" onclick="logoutUser()">Выйти</button>
-   <button class="btn primary" onclick="loadAll()">Обновить</button>
- </div>
-</header>
-
-<section class="hero">
- <div><h2>Закупки — в одном рабочем окне</h2><p>Актуальная лента закупок, поиск, сроки, бюджеты и технические спецификации — в единой системе.</p></div>
- <div class="hero-box"><b>5 источников в системе</b><br><span style="font-size:12px;opacity:.9">Goszakup, MITWORK, Tizilim, Air Astana и Samruk.</span></div>
-</section>
-
-<div class="source-strip">
- <span class="source-chip"><span class="dot"></span>Goszakup</span>
- <span class="source-chip"><span class="dot"></span>MITWORK</span>
- <span class="source-chip"><span class="dot"></span>Tizilim</span>
- <span class="source-chip"><span class="dot"></span>Air Astana</span>
- <span class="source-chip"><span class="dot"></span>Samruk</span>
-</div>
-
-<div id="samrukResult" class="samruk-result"></div>
+<header class="header"><div class="brand"><div class="logo">TR</div><div><h1>Tender Radar KZ</h1><p>Профиль: компания Айдара · Этап 1 v0.2</p></div></div><div class="actions"><span id="connBadge" class="badge warn">Подключение...</span><span id="userBadge" class="badge" style="display:none"></span><button id="logoutBtn" class="btn soft" style="display:none" onclick="logoutUser()">Выйти</button><button class="btn primary" onclick="loadAll()">Обновить данные</button></div></header>
+<section class="hero"><div><h2>Актуальные товарные тендеры — без ручного мониторинга</h2><p>Этап 1: только Госзакуп и Samruk. Только товары: картриджи и расходные материалы. Услуги автоматически исключаются.</p></div><div class="hero-box"><b>Цель этапа</b><br>Сотрудник открывает одно окно и сразу видит актуальную выборку по нужным товарам — без просмотра двух площадок вручную.</div></section>
+<section class="profile"><div class="profile-card"><h3>Профиль поиска</h3><div class="chips"><span class="chip good">✓ Картриджи</span><span class="chip good">✓ Расходные материалы</span><span class="chip">Только товары</span><span class="chip off">Услуги исключены</span></div></div><div class="profile-card"><h3>Источники этапа 1</h3><div class="chips"><span class="chip good">✓ Госзакуп</span><span class="chip good">✓ Samruk</span></div></div></section>
 <div id="notice" class="notice"></div>
-
-<section class="kpis">
- <div class="kpi"><div class="lab">Записей в базе</div><div id="kTotal" class="num">—</div><div class="hint">в загруженной выборке</div></div>
- <div class="kpi"><div class="lab">Активные</div><div id="kActive" class="num">—</div><div class="hint">открытые на текущий момент</div></div>
- <div class="kpi"><div class="lab">Горящие ≤48 ч</div><div id="kUrgent" class="num">—</div><div class="hint">по сроку окончания</div></div>
- <div class="kpi"><div class="lab">Источников с данными</div><div id="kSources" class="num">—</div><div class="hint">в текущей базе</div></div>
- <div class="kpi"><div class="lab">Сумма известных бюджетов</div><div id="kAmount" class="num">—</div><div class="hint">по закупкам с указанным бюджетом</div></div>
-</section>
-
-<div class="filters">
- <input id="q" class="input" placeholder="Поиск: предмет, заказчик, БИН..." oninput="applyFilters()">
- <select id="fSource" class="select" onchange="applyFilters()"><option value="">Все источники</option></select>
- <select id="fStatus" class="select" onchange="applyFilters()"><option value="">Все</option><option value="active">Активные</option><option value="archive">Архив</option></select>
- <select id="fPriority" class="select" onchange="applyFilters()"><option value="">Любой приоритет</option><option value="high">🔥 Срочно</option><option value="mid">🟡 Смотреть</option><option value="low">⚪ В базе</option></select>
- <button class="btn soft" onclick="resetFilters()">Сбросить</button>
+<section class="kpis"><div class="kpi"><div class="lab">Подходящих активных</div><div id="kTotal" class="num">—</div><div class="hint">товары по текущему профилю</div></div><div class="kpi"><div class="lab">Госзакуп</div><div id="kGos" class="num">—</div><div class="hint">подходящих активных</div></div><div class="kpi"><div class="lab">Samruk</div><div id="kSam" class="num">—</div><div class="hint">подходящих активных</div></div><div class="kpi"><div class="lab">Горящие ≤48 ч</div><div id="kUrgent" class="num">—</div><div class="hint">требуют внимания</div></div><div class="kpi"><div class="lab">С техспецификацией</div><div id="kTech" class="num">—</div><div class="hint">уже разобраны системой</div></div></section>
+<div class="filters"><input id="q" class="input" placeholder="Быстрый поиск внутри найденного..." oninput="applyFilters()"><select id="fSource" class="select" onchange="applyFilters()"><option value="">Оба источника</option><option value="goszakup">Госзакуп</option><option value="samruk">Samruk</option></select><select id="fPriority" class="select" onchange="applyFilters()"><option value="">Все сроки</option><option value="high">🔥 ≤48 часов</option><option value="mid">🟡 Позже</option></select><button class="btn soft" onclick="resetFilters()">Сбросить</button></div>
+<div class="grid"><section class="card"><div class="table-head"><h3>Актуальные товары</h3><span id="countLabel">0 записей</span></div><div style="overflow:auto"><table><thead><tr><th>Срок</th><th>Предмет / заказчик</th><th>Источник</th><th>Сумма</th><th>Окончание</th><th></th></tr></thead><tbody id="rows"></tbody></table></div><div class="pager"><button id="prevBtn" onclick="changePage(-1)">←</button><span id="pageLabel" class="sub"></span><button id="nextBtn" onclick="changePage(1)">→</button></div></section><aside><div class="card side-card"><h4>Статус</h4><p id="statusText">Подключение к данным...</p></div><div class="card side-card"><h4>Что отсекается</h4><p>Заправка картриджей, ремонт, обслуживание, восстановление и другие услуги не попадают в рабочую выборку.</p></div><div class="card side-card"><h4>Критерий готовности этапа</h4><p>На экране остаются только актуальные товарные закупки Госзакупа и Samruk по картриджам и расходным материалам.</p></div></aside></div>
 </div>
-
-<div class="grid">
- <section class="card">
-   <div class="table-head"><h3>Лента закупок</h3><span id="countLabel">0 записей</span></div>
-   <div style="overflow:auto">
-   <table>
-    <thead><tr><th>Приоритет</th><th>Предмет / заказчик</th><th>Источник</th><th>Сумма</th><th>Срок</th><th></th></tr></thead>
-    <tbody id="rows"></tbody>
-   </table>
-   </div>
-   <div class="pager">
-    <button id="prevBtn" onclick="changePage(-1)">←</button>
-    <span id="pageLabel" class="sub"></span>
-    <button id="nextBtn" onclick="changePage(1)">→</button>
-   </div>
- </section>
-
- <aside>
-  <div class="card side-card"><h4>Статус</h4><p id="statusText">Подключение к данным...</p></div>
-  <div class="card side-card"><h4>По источникам</h4><div id="sourceStats"></div></div>
-  <div class="card side-card"><h4>Что уже работает</h4><p>Поиск, фильтры, приоритет по сроку, карточка закупки и переход на исходную площадку.</p></div>
- </aside>
-</div>
-</div>
-
-<div id="detailModal" class="modal" onclick="if(event.target===this) closeDetail()">
- <div class="modal-card">
-  <div class="modal-top"><div><span id="mPrio" class="prio low"></span><h3 id="mTitle" style="margin:9px 0 3px"></h3><div id="mCustomer" class="sub"></div></div><button class="close" onclick="closeDetail()">✕</button></div>
-  <div class="detail-grid">
-   <div class="detail"><b>Источник</b><span id="mSource"></span></div>
-   <div class="detail"><b>Статус</b><span id="mStatus"></span></div>
-   <div class="detail"><b>БИН</b><span id="mBin"></span></div>
-   <div class="detail"><b>Регион</b><span id="mRegion"></span></div>
-   <div class="detail"><b>Сумма</b><span id="mAmount"></span></div>
-   <div class="detail"><b>Окончание</b><span id="mDeadline"></span></div>
-   <div class="detail full"><b>Описание</b><span id="mDesc"></span></div>
-  </div>
-  <div id="mTechSpec" class="techspec">
-   <h4>Техническая спецификация</h4>
-   <div id="mTechSpecGrid" class="techspec-grid"></div>
-   <div id="mTechSpecNote" class="techspec-note"></div>
-  </div>
-  <div style="margin-top:13px"><a id="mLink" class="btn primary" style="display:inline-block;text-decoration:none" target="_blank">Открыть на площадке</a></div>
- </div>
-</div>
-
-<div id="loginModal" class="modal open">
- <div class="modal-card setup">
-  <div class="modal-top"><div><h3>Вход в Aidar Tenders</h3><p>Введите персональный 4-значный код доступа.</p></div></div>
-  <input id="teamCode" type="password" inputmode="numeric" maxlength="4" placeholder="Код доступа" autocomplete="off">
-  <div id="loginError" class="small" style="color:#b42318;min-height:16px;margin-top:7px"></div>
-  <div style="margin-top:13px;display:flex;gap:8px">
-   <button class="btn primary" onclick="loginUser()">Войти</button>
-  </div>
- </div>
-</div>
-
+<div id="detailModal" class="modal" onclick="if(event.target===this) closeDetail()"><div class="modal-card"><div class="modal-top"><div><span id="mPrio" class="prio low"></span><h3 id="mTitle" style="margin:9px 0 3px"></h3><div id="mCustomer" class="sub"></div></div><button class="close" onclick="closeDetail()">✕</button></div><div class="detail-grid"><div class="detail"><b>Источник</b><span id="mSource"></span></div><div class="detail"><b>Статус</b><span id="mStatus"></span></div><div class="detail"><b>БИН</b><span id="mBin"></span></div><div class="detail"><b>Регион</b><span id="mRegion"></span></div><div class="detail"><b>Сумма</b><span id="mAmount"></span></div><div class="detail"><b>Окончание</b><span id="mDeadline"></span></div><div class="detail full"><b>Описание</b><span id="mDesc"></span></div></div><div id="mTechSpec" class="techspec"><h4>Техническая спецификация</h4><div id="mTechSpecGrid" class="techspec-grid"></div><div id="mTechSpecNote" class="techspec-note"></div></div><div style="margin-top:13px"><a id="mLink" class="btn primary" style="display:inline-block;text-decoration:none" target="_blank">Открыть оригинал</a></div></div></div>
+<div id="loginModal" class="modal open"><div class="modal-card setup"><div class="modal-top"><div><h3>Вход в Tender Radar KZ</h3><p>Введите персональный 4-значный код доступа.</p></div></div><input id="teamCode" type="password" inputmode="numeric" maxlength="4" placeholder="Код доступа" autocomplete="off"><div id="loginError" class="small" style="color:#b42318;min-height:16px;margin-top:7px"></div><div style="margin-top:13px"><button class="btn primary" onclick="loginUser()">Войти</button></div></div></div>
 <script>
 const DATA_GATEWAY=atob("aHR0cHM6Ly9zd3BucHhob2F4Y25sbGllZWpzbi5zdXBhYmFzZS5jbw==");
 const DATA_KEY="sb_publishable_IDfG17rqCnpT7CeZairyyg_Sx7agWuu";
-const TEAM_CODES={
- "1111":{role:"admin",label:"Администратор"},
- "2222":{role:"staff",label:"Сотрудник 1"},
- "3333":{role:"staff",label:"Сотрудник 2"},
- "4444":{role:"staff",label:"Сотрудник 3"},
- "5555":{role:"staff",label:"Сотрудник 4"}
-};
-let currentUser=null;
-let allRows=[], filteredRows=[], page=1;
-const PAGE_SIZE=50;
-
+const TEAM_CODES={"1111":{role:"admin",label:"Администратор"},"2222":{role:"staff",label:"Сотрудник 1"},"3333":{role:"staff",label:"Сотрудник 2"},"4444":{role:"staff",label:"Сотрудник 3"},"5555":{role:"staff",label:"Сотрудник 4"}};
+const INCLUDE_RE=[/картридж/i,/тонер/i,/чернил/i,/фотобарабан/i,/фото барабан/i,/drum/i,/девелопер/i,/developer/i,/расходн.{0,12}материал/i,/печатающ.{0,8}голов/i,/термоплен/i,/термо.?плен/i,/ролик.{0,12}(захват|подач)/i];
+const EXCLUDE_RE=[/услуг/i,/заправ/i,/ремонт/i,/обслужив/i,/восстанов/i,/утилизац/i,/аренд/i,/работы\b/i,/техническ.{0,10}обслуж/i];
+let currentUser=null,allRows=[],radarRows=[],filteredRows=[],page=1;const PAGE_SIZE=40;
 function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
-function fmtAmount(v){
- if(v===null||v===undefined||v==="") return "—";
- const n=Number(v); if(!Number.isFinite(n)) return esc(v);
- return new Intl.NumberFormat("ru-RU",{maximumFractionDigits:0}).format(n)+" ₸";
-}
-function fmtDate(v){
- if(!v) return "—";
- const d=new Date(v); if(isNaN(d)) return esc(v);
- return d.toLocaleString("ru-RU",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"});
-}
-function sourceName(code){
- return ({goszakup:"Goszakup",mitwork:"MITWORK",tizilim:"Tizilim",air_astana:"Air Astana",samruk:"Samruk"})[code]||code||"—";
-}
-function priority(t){
- if(!t.is_active) return "low";
- if(t.expires_at){
-  const hrs=(new Date(t.expires_at)-new Date())/36e5;
-  if(hrs>=0 && hrs<=48) return "high";
-  if(hrs>48 && hrs<=120) return "mid";
- }
- return "mid";
-}
-function pLabel(p){return p==="high"?"🔥 Срочно":p==="mid"?"🟡 Смотреть":"⚪ В базе"}
-function restoreUser(){
- const raw=sessionStorage.getItem("aidar_team_user");
- if(!raw) return false;
- try{currentUser=JSON.parse(raw);return !!currentUser}catch(_){return false}
-}
-function applyUserUI(){
- const ub=document.getElementById("userBadge");
- const lb=document.getElementById("logoutBtn");
- const sb=document.getElementById("samrukBtn");
- if(!currentUser){ub.style.display="none";lb.style.display="none";return}
- ub.textContent=currentUser.label;
- ub.style.display="inline-block";
- lb.style.display="inline-block";
- // На этапе командного теста обновление Samruk доступно администратору.
- if(sb) sb.style.display=currentUser.role==="admin"?"inline-block":"none";
-}
-async function loginUser(){
- const input=document.getElementById("teamCode");
- const code=(input.value||"").trim();
- const u=TEAM_CODES[code];
- if(!u){document.getElementById("loginError").textContent="Неверный код доступа.";input.select();return}
- currentUser={role:u.role,label:u.label};
- sessionStorage.setItem("aidar_team_user",JSON.stringify(currentUser));
- document.getElementById("loginError").textContent="";
- document.getElementById("loginModal").classList.remove("open");
- applyUserUI();
- await loadAll();
-}
-function logoutUser(){
- sessionStorage.removeItem("aidar_team_user");
- currentUser=null;
- allRows=[];filteredRows=[];
- document.getElementById("teamCode").value="";
- document.getElementById("loginModal").classList.add("open");
- applyUserUI();
- setConn("Ожидание входа","warn");
-}
-function setConn(text,cls){const b=document.getElementById("connBadge");b.textContent=text;b.className="badge "+cls}
-
-async function loadAll(){
- const key=DATA_KEY;
- if(!currentUser){setConn("Ожидание входа","warn");return}
- setConn("Подключение…","warn");
- document.getElementById("statusText").textContent="Загружаю актуальные данные…";
- try{
-   const rows=[];
-   let from=0, step=1000;
-   while(true){
-     const url=DATA_GATEWAY+"/rest/v1/tenders?select=id,source_code,source_tender_id,source_lot_id,public_url,title,description,customer_name,customer_bin,region,status_name,amount,currency,quantity,unit,published_at,started_at,expires_at,is_active,raw&order=id.desc";
-     const headers={
-       "apikey":key,
-       "Range":from+"-"+(from+step-1),
-       "Prefer":"count=exact"
-     };
-     if(key.split(".").length===3){
-       headers["Authorization"]="Bearer "+key;
-     }
-     const r=await fetch(url,{headers});
-     if(!r.ok){
-       if(r.status===401 || r.status===403){
-         throw new Error("Система не смогла подключиться к данным. Обратитесь к администратору.");
-       }
-       throw new Error("Сервис данных временно недоступен. Повторите попытку позже.");
-     }
-     const batch=await r.json();
-     rows.push(...batch);
-     if(batch.length<step) break;
-     from+=step;
-     if(from>=10000) break;
-   }
-   allRows=rows;
-   buildSourceFilter();
-   updateKpis();
-   applyFilters();
-   setConn("СИСТЕМА • ПОДКЛЮЧЕНА","live");
-   document.getElementById("statusText").textContent="Подключено. Актуальные данные загружены.";
-   document.getElementById("notice").style.display="none";
- }catch(e){
-   console.error(e);
-   setConn("Ошибка доступа","err");
-   const n=document.getElementById("notice");
-   n.style.display="block";
-   n.textContent="Не удалось загрузить данные: "+e.message;
-   document.getElementById("statusText").textContent="Сервис данных временно недоступен. Пришлите скрин этой страницы ответственному сотруднику.";
- }
-}
-function buildSourceFilter(){
- const sel=document.getElementById("fSource");
- const cur=sel.value;
- sel.innerHTML='<option value="">Все источники</option>';
- [...new Set(allRows.map(x=>x.source_code).filter(Boolean))].sort().forEach(s=>{
-   const o=document.createElement("option");o.value=s;o.textContent=sourceName(s);sel.appendChild(o)
- });
- sel.value=cur;
-}
-function updateKpis(){
- const now=new Date();
- const active=allRows.filter(x=>x.is_active===true);
- const urgent=active.filter(x=>x.expires_at && (new Date(x.expires_at)-now)>=0 && (new Date(x.expires_at)-now)<=48*36e5);
- const srcs=[...new Set(allRows.map(x=>x.source_code).filter(Boolean))];
- let sum=0; allRows.forEach(x=>{const n=Number(x.amount);if(Number.isFinite(n))sum+=n});
- document.getElementById("kTotal").textContent=allRows.length.toLocaleString("ru-RU");
- document.getElementById("kActive").textContent=active.length.toLocaleString("ru-RU");
- document.getElementById("kUrgent").textContent=urgent.length.toLocaleString("ru-RU");
- document.getElementById("kSources").textContent=srcs.length;
- document.getElementById("kAmount").textContent=sum?new Intl.NumberFormat("ru-RU",{notation:"compact",maximumFractionDigits:1}).format(sum)+" ₸":"—";
- const counts={};allRows.forEach(x=>counts[x.source_code]=(counts[x.source_code]||0)+1);
- document.getElementById("sourceStats").innerHTML=Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(([s,c])=>'<div class="rowline"><b>'+esc(sourceName(s))+'</b> — '+c.toLocaleString("ru-RU")+'</div>').join("");
-}
-function applyFilters(){
- const q=document.getElementById("q").value.trim().toLowerCase();
- const src=document.getElementById("fSource").value;
- const st=document.getElementById("fStatus").value;
- const pr=document.getElementById("fPriority").value;
- filteredRows=allRows.filter(t=>{
-   const blob=[t.title,t.description,t.customer_name,t.customer_bin,t.source_lot_id,t.source_tender_id].join(" ").toLowerCase();
-   const p=priority(t);
-   return (!q||blob.includes(q))&&(!src||t.source_code===src)&&(!st||(st==="active"?t.is_active===true:t.is_active!==true))&&(!pr||p===pr);
- });
- page=1; renderPage();
-}
-function resetFilters(){
- document.getElementById("q").value="";
- ["fSource","fStatus","fPriority"].forEach(id=>document.getElementById(id).selectedIndex=0);
- applyFilters();
-}
+function fmtAmount(v){if(v===null||v===undefined||v==="")return"—";const n=Number(v);if(!Number.isFinite(n))return esc(v);return new Intl.NumberFormat("ru-RU",{maximumFractionDigits:0}).format(n)+" ₸"}
+function fmtDate(v){if(!v)return"—";const d=new Date(v);if(isNaN(d))return esc(v);return d.toLocaleString("ru-RU",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"})}
+function sourceName(c){return c==="goszakup"?"Госзакуп":c==="samruk"?"Samruk":c||"—"}
+function priority(t){if(t.expires_at){const h=(new Date(t.expires_at)-new Date())/36e5;if(h>=0&&h<=48)return"high"}return"mid"}
+function pLabel(p){return p==="high"?"🔥 ≤48 ч":"🟡 Актуально"}
+function restoreUser(){const raw=sessionStorage.getItem("tender_radar_user")||sessionStorage.getItem("aidar_team_user");if(!raw)return false;try{currentUser=JSON.parse(raw);return!!currentUser}catch(_){return false}}
+function applyUserUI(){const ub=document.getElementById("userBadge"),lb=document.getElementById("logoutBtn");if(!currentUser){ub.style.display="none";lb.style.display="none";return}ub.textContent=currentUser.label;ub.style.display="inline-block";lb.style.display="inline-block"}
+async function loginUser(){const input=document.getElementById("teamCode"),code=(input.value||"").trim(),u=TEAM_CODES[code];if(!u){document.getElementById("loginError").textContent="Неверный код доступа.";input.select();return}currentUser={role:u.role,label:u.label};sessionStorage.setItem("tender_radar_user",JSON.stringify(currentUser));document.getElementById("loginError").textContent="";document.getElementById("loginModal").classList.remove("open");applyUserUI();await loadAll()}
+function logoutUser(){sessionStorage.removeItem("tender_radar_user");sessionStorage.removeItem("aidar_team_user");currentUser=null;allRows=[];radarRows=[];filteredRows=[];document.getElementById("teamCode").value="";document.getElementById("loginModal").classList.add("open");applyUserUI();setConn("Ожидание входа","warn")}
+function setConn(t,c){const b=document.getElementById("connBadge");b.textContent=t;b.className="badge "+c}
+function isGoodsMatch(t){if(!["goszakup","samruk"].includes(t.source_code)||t.is_active!==true)return false;const blob=[t.title,t.description,t.customer_name,JSON.stringify(t.raw||{})].join(" ");if(EXCLUDE_RE.some(r=>r.test(blob)))return false;return INCLUDE_RE.some(r=>r.test(blob))}
+function groupTenderRows(rows){const groups=new Map();for(const t of rows){const cleanUrl=String(t.public_url||"").split("?")[0].split("#")[0];const key=t.source_code+"|"+(t.source_tender_id||cleanUrl||t.source_lot_id||t.id);let g=groups.get(key);if(!g){t._children=[t];t._lotCount=1;groups.set(key,t);continue}const exists=g._children.some(x=>(x.source_lot_id&&t.source_lot_id&&x.source_lot_id===t.source_lot_id)||(x.id===t.id));if(!exists)g._children.push(t);g._lotCount=g._children.length}return Array.from(groups.values())}
+async function loadAll(){if(!currentUser){setConn("Ожидание входа","warn");return}setConn("Подключение…","warn");document.getElementById("statusText").textContent="Загружаю и отбираю актуальные товары…";try{const rows=[];let from=0,step=1000;while(true){const url=DATA_GATEWAY+"/rest/v1/tenders?select=id,source_code,source_tender_id,source_lot_id,public_url,title,description,customer_name,customer_bin,region,status_name,amount,currency,quantity,unit,published_at,started_at,expires_at,is_active,raw&order=id.desc";const headers={apikey:DATA_KEY,Range:from+"-"+(from+step-1),Prefer:"count=exact"};if(DATA_KEY.split(".").length===3)headers.Authorization="Bearer "+DATA_KEY;const r=await fetch(url,{headers});if(!r.ok)throw new Error(r.status===401||r.status===403?"Нет доступа к данным.":"Сервис данных временно недоступен.");const batch=await r.json();rows.push(...batch);if(batch.length<step)break;from+=step;if(from>=10000)break}allRows=rows;radarRows=groupTenderRows(rows.filter(isGoodsMatch)).sort((a,b)=>{const pa=priority(a)==="high"?0:1,pb=priority(b)==="high"?0:1;if(pa!==pb)return pa-pb;const da=a.expires_at?new Date(a.expires_at):new Date("2999-01-01"),db=b.expires_at?new Date(b.expires_at):new Date("2999-01-01");return da-db});updateKpis();applyFilters();setConn("РАДАР • ГОТОВ","live");document.getElementById("statusText").textContent="Актуальная товарная выборка сформирована.";document.getElementById("notice").style.display="none"}catch(e){console.error(e);setConn("Ошибка доступа","err");const n=document.getElementById("notice");n.style.display="block";n.textContent="Не удалось загрузить данные: "+e.message;document.getElementById("statusText").textContent="Данные временно недоступны."}}
+function updateKpis(){const now=new Date(),urgent=radarRows.filter(x=>x.expires_at&&(new Date(x.expires_at)-now)>=0&&(new Date(x.expires_at)-now)<=48*36e5),gos=radarRows.filter(x=>x.source_code==="goszakup"),sam=radarRows.filter(x=>x.source_code==="samruk"),tech=radarRows.filter(x=>x.raw&&typeof x.raw==="object"&&x.raw.techspec);document.getElementById("kTotal").textContent=radarRows.length.toLocaleString("ru-RU");document.getElementById("kGos").textContent=gos.length.toLocaleString("ru-RU");document.getElementById("kSam").textContent=sam.length.toLocaleString("ru-RU");document.getElementById("kUrgent").textContent=urgent.length.toLocaleString("ru-RU");document.getElementById("kTech").textContent=tech.length.toLocaleString("ru-RU")}
+function applyFilters(){const q=document.getElementById("q").value.trim().toLowerCase(),src=document.getElementById("fSource").value,pr=document.getElementById("fPriority").value;filteredRows=radarRows.filter(t=>{const blob=[t.title,t.description,t.customer_name,t.customer_bin,t.source_lot_id,t.source_tender_id].join(" ").toLowerCase(),p=priority(t);return(!q||blob.includes(q))&&(!src||t.source_code===src)&&(!pr||p===pr)});page=1;renderPage()}
+function resetFilters(){document.getElementById("q").value="";document.getElementById("fSource").selectedIndex=0;document.getElementById("fPriority").selectedIndex=0;applyFilters()}
 function changePage(d){const pages=Math.max(1,Math.ceil(filteredRows.length/PAGE_SIZE));page=Math.min(pages,Math.max(1,page+d));renderPage()}
-function renderPage(){
- const body=document.getElementById("rows");body.innerHTML="";
- const pages=Math.max(1,Math.ceil(filteredRows.length/PAGE_SIZE));
- if(page>pages)page=pages;
- const slice=filteredRows.slice((page-1)*PAGE_SIZE,page*PAGE_SIZE);
- slice.forEach(t=>{
-  const p=priority(t), idx=allRows.indexOf(t);
-  const tr=document.createElement("tr");
-  tr.innerHTML='<td><span class="prio '+p+'">'+pLabel(p)+'</span><div class="sub" style="margin-top:4px">'+(t.is_active?"АКТИВЕН":"АРХИВ")+'</div></td>'+
-   '<td><div class="title">'+esc(t.title||"Без названия")+'</div><div class="sub">'+esc(t.customer_name||"—")+(t.customer_bin?"<br>БИН: "+esc(t.customer_bin):"")+'</div></td>'+
-   '<td>'+esc(sourceName(t.source_code))+'</td>'+
-   '<td><b>'+fmtAmount(t.amount)+'</b></td>'+
-   '<td>'+fmtDate(t.expires_at)+'</td>'+
-   '<td><a class="link" onclick="openDetail('+idx+')">Открыть →</a></td>';
-  body.appendChild(tr);
- });
- document.getElementById("countLabel").textContent=filteredRows.length.toLocaleString("ru-RU")+" записей";
- document.getElementById("pageLabel").textContent="Страница "+page+" из "+pages;
- document.getElementById("prevBtn").disabled=page<=1;
- document.getElementById("nextBtn").disabled=page>=pages;
-}
-function openDetail(i){
- const t=allRows[i],p=priority(t), mp=document.getElementById("mPrio");
- mp.className="prio "+p;mp.textContent=pLabel(p);
- document.getElementById("mTitle").textContent=t.title||"Без названия";
- document.getElementById("mCustomer").textContent=t.customer_name||"—";
- document.getElementById("mSource").textContent=sourceName(t.source_code);
- document.getElementById("mStatus").textContent=t.status_name||(t.is_active?"АКТИВЕН":"АРХИВ");
- document.getElementById("mBin").textContent=t.customer_bin||"—";
- document.getElementById("mRegion").textContent=t.region||"—";
- document.getElementById("mAmount").textContent=fmtAmount(t.amount);
- document.getElementById("mDeadline").textContent=fmtDate(t.expires_at);
- document.getElementById("mDesc").textContent=t.description||"—";
-
- const tech=document.getElementById("mTechSpec");
- const techGrid=document.getElementById("mTechSpecGrid");
- const techNote=document.getElementById("mTechSpecNote");
- const spec=(t.raw && typeof t.raw==="object") ? t.raw.techspec : null;
-
- if(spec && typeof spec==="object"){
-   const pf=(spec.parsed_fields && typeof spec.parsed_fields==="object") ? spec.parsed_fields : {};
-   const items=[
-     ["Закупка", spec.procurement_no],
-     ["Лот", spec.lot_id],
-     ["Краткое описание", spec.short_description],
-     ["Количество", spec.quantity!=null ? String(spec.quantity)+(spec.unit ? " "+spec.unit : "") : null],
-     ["Место поставки", spec.delivery_place],
-     ["Условия поставки", spec.delivery_terms],
-     ["Срок поставки", spec.delivery_period],
-     ["Оплата", spec.payment_terms],
-     ["Тип / чернила", pf.ink_type],
-     ["Цвет", pf.color],
-     ["Совместимость", pf.compatibility],
-     ["Производительность / объём", pf.yield_or_volume],
-     ["Назначение", pf.purpose]
-   ].filter(x=>x[1]!==null && x[1]!==undefined && String(x[1]).trim()!=="");
-
-   techGrid.innerHTML=items.map(x =>
-     '<div class="techspec-item"><b>'+esc(x[0])+'</b><span>'+esc(String(x[1]))+'</span></div>'
-   ).join("");
-
-   const extras=[];
-   if(spec.additional_description) extras.push("<b>Доп. характеристика:</b> "+esc(spec.additional_description));
-   if(spec.technical_requirements) extras.push("<b>Технические требования:</b> "+esc(spec.technical_requirements));
-   if(spec.source_pdf) extras.push("<b>Источник:</b> "+esc(spec.source_pdf));
-   techNote.innerHTML=extras.join("<br><br>");
-   tech.style.display="block";
- }else{
-   techGrid.innerHTML="";
-   techNote.innerHTML="";
-   tech.style.display="none";
- }
-
- const a=document.getElementById("mLink");a.href=t.public_url||"#";a.style.display=t.public_url?"inline-block":"none";
- document.getElementById("detailModal").classList.add("open");
-}
+function renderPage(){const body=document.getElementById("rows");body.innerHTML="";const pages=Math.max(1,Math.ceil(filteredRows.length/PAGE_SIZE));if(page>pages)page=pages;filteredRows.slice((page-1)*PAGE_SIZE,page*PAGE_SIZE).forEach(t=>{const p=priority(t),idx=allRows.indexOf(t),tr=document.createElement("tr");tr.innerHTML='<td><span class="prio '+p+'">'+pLabel(p)+'</span></td><td><div class="title">'+esc(t.title||"Без названия")+'</div><div class="sub">'+esc(t.customer_name||"—")+(t.customer_bin?"<br>БИН: "+esc(t.customer_bin):"")+(t._lotCount>1?"<br><b>"+t._lotCount+" лотов в одной закупке</b>":"")+'</div></td><td>'+esc(sourceName(t.source_code))+'</td><td><b>'+fmtAmount(t.amount)+'</b></td><td>'+fmtDate(t.expires_at)+'</td><td><a class="link" onclick="openDetail('+idx+')">Открыть →</a></td>';body.appendChild(tr)});document.getElementById("countLabel").textContent=filteredRows.length.toLocaleString("ru-RU")+" тендеров";document.getElementById("pageLabel").textContent="Страница "+page+" из "+pages;document.getElementById("prevBtn").disabled=page<=1;document.getElementById("nextBtn").disabled=page>=pages}
+function openDetail(i){const t=allRows[i],p=priority(t),mp=document.getElementById("mPrio");mp.className="prio "+p;mp.textContent=pLabel(p);document.getElementById("mTitle").textContent=t.title||"Без названия";document.getElementById("mCustomer").textContent=t.customer_name||"—";document.getElementById("mSource").textContent=sourceName(t.source_code);document.getElementById("mStatus").textContent=t.status_name||(t.is_active?"АКТИВЕН":"АРХИВ");document.getElementById("mBin").textContent=t.customer_bin||"—";document.getElementById("mRegion").textContent=t.region||"—";document.getElementById("mAmount").textContent=fmtAmount(t.amount);document.getElementById("mDeadline").textContent=fmtDate(t.expires_at);document.getElementById("mDesc").textContent=(t.description||"—")+(t._lotCount>1?" · В этой закупке "+t._lotCount+" лотов.":"");const tech=document.getElementById("mTechSpec"),grid=document.getElementById("mTechSpecGrid"),note=document.getElementById("mTechSpecNote"),spec=(t.raw&&typeof t.raw==="object")?t.raw.techspec:null;if(spec&&typeof spec==="object"){const pf=(spec.parsed_fields&&typeof spec.parsed_fields==="object")?spec.parsed_fields:{},items=[["Закупка",spec.procurement_no],["Лот",spec.lot_id],["Краткое описание",spec.short_description],["Количество",spec.quantity!=null?String(spec.quantity)+(spec.unit?" "+spec.unit:""):null],["Место поставки",spec.delivery_place],["Условия поставки",spec.delivery_terms],["Срок поставки",spec.delivery_period],["Оплата",spec.payment_terms],["Тип / чернила",pf.ink_type],["Цвет",pf.color],["Совместимость",pf.compatibility],["Производительность / объём",pf.yield_or_volume],["Назначение",pf.purpose]].filter(x=>x[1]!=null&&String(x[1]).trim()!=="");grid.innerHTML=items.map(x=>'<div class="techspec-item"><b>'+esc(x[0])+'</b><span>'+esc(String(x[1]))+'</span></div>').join("");const extras=[];if(spec.additional_description)extras.push("<b>Доп. характеристика:</b> "+esc(spec.additional_description));if(spec.technical_requirements)extras.push("<b>Технические требования:</b> "+esc(spec.technical_requirements));note.innerHTML=extras.join("<br><br>");tech.style.display="block"}else{grid.innerHTML="";note.innerHTML="";tech.style.display="none"}const a=document.getElementById("mLink");a.href=t.public_url||"#";a.style.display=t.public_url?"inline-block":"none";document.getElementById("detailModal").classList.add("open")}
 function closeDetail(){document.getElementById("detailModal").classList.remove("open")}
-
-function showSamrukResult(text,kind){
- const n=document.getElementById("samrukResult");
- n.className="samruk-result "+(kind||"info");
- n.textContent=text;
-}
-async function updateSamruk(){
- const b=document.getElementById("samrukBtn");
- const oldText=b.textContent;
- const beforeTotal=Array.isArray(allRows)?allRows.length:0;
- b.disabled=true;
- b.textContent="Samruk: обновляю…";
- showSamrukResult("Samruk: идёт обновление. Оставайтесь на этой странице — техническое окно больше не открывается.","info");
- try{
-   const r=await fetch("http://127.0.0.1:8765/update-samruk?ts="+Date.now(),{
-     method:"GET",
-     cache:"no-store"
-   });
-   let data=null;
-   try{ data=await r.json(); }catch(_){}
-   if(!r.ok || !data || data.ok!==true){
-     const msg=(data&&data.message)?data.message:("HTTP "+r.status);
-     throw new Error(msg);
-   }
-
-   await loadAll();
-   const afterTotal=Array.isArray(allRows)?allRows.length:beforeTotal;
-   const added=Math.max(0,afterTotal-beforeTotal);
-   const tech=(data.auto_techspec_downloaded||0)+(data.auto_techspec_from_card||0);
-   const errors=(data.pending_errors||0)+(data.auto_techspec_errors||0);
-   showSamrukResult(
-     "Samruk готово. Проверено "+(data.rows||0)+
-     " · Новых "+added+
-     " · Техспек "+tech+
-     " · Ошибок "+errors,
-     errors?"bad":"ok"
-   );
- }catch(e){
-   console.error(e);
-   const msg=String(e&&e.message?e.message:e);
-
-   if(/Failed to fetch|NetworkError|Load failed/i.test(msg)){
-     showSamrukResult(
-       "Обновление Samruk сейчас не запущено. Откройте ярлык «Aidar Tenders — обновление Samruk» и повторите.",
-       "bad"
-     );
-   }else if(/Открыто несколько вкладок Samruk/i.test(msg)){
-     showSamrukResult(
-       "Открыто несколько вкладок Samruk. Оставьте одну вкладку с нужным поиском и повторите обновление.",
-       "bad"
-     );
-   }else if(
-     /Не найден открытый Samruk в Chrome collector mode/i.test(msg) ||
-     /WinError\s*10061/i.test(msg) ||
-     /urlopen error/i.test(msg) ||
-     /connection refused/i.test(msg) ||
-     /отверг запрос на подключение/i.test(msg)
-   ){
-     showSamrukResult(
-       "Samruk не открыт. Откройте ярлык «Samruk для Aidar Tenders», войдите в систему и повторите обновление.",
-       "bad"
-     );
-   }else{
-     showSamrukResult("Samruk не обновлён: "+msg,"bad");
-   }
- }finally{
-   b.disabled=false;
-   b.textContent=oldText;
- }
-}
-
-document.getElementById("teamCode").addEventListener("keydown",e=>{if(e.key==="Enter")loginUser()});
-if(restoreUser()){
- document.getElementById("loginModal").classList.remove("open");
- applyUserUI();
- loadAll();
-}else{
- applyUserUI();
- setConn("Ожидание входа","warn");
- setTimeout(()=>document.getElementById("teamCode").focus(),50);
-}
+document.getElementById("teamCode").addEventListener("keydown",e=>{if(e.key==="Enter")loginUser()});if(restoreUser()){document.getElementById("loginModal").classList.remove("open");applyUserUI();loadAll()}else{applyUserUI();setConn("Ожидание входа","warn");setTimeout(()=>document.getElementById("teamCode").focus(),50)}
 </script>
-</body>
-</html>
+</body></html>
